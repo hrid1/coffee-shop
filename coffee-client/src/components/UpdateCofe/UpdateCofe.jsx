@@ -1,14 +1,18 @@
 import { useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
-const AddCoffee = () => {
+const UpdateCofe = () => {
+  const coffee = useLoaderData();
+  //   console.log(coffee);
+
   const [formData, setFormData] = useState({
-    name: "",
-    quantity: "",
-    supplier: "",
-    taste: "",
-    category: "",
-    details: "",
-    photo: "",
+    name: coffee.name,
+    quantity: coffee.quantity,
+    supplier: coffee.supplier,
+    taste: coffee.taste,
+    category: coffee.category,
+    details: coffee.details,
+    photo: coffee.photo,
   });
 
   const handleChange = (e) => {
@@ -18,10 +22,9 @@ const AddCoffee = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // post
-    fetch("http://localhost:4000/coffee", {
-      method: "POST",
+    // console.log(formData)
+    fetch(`http://localhost:4000/coffee-update/${coffee._id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -29,20 +32,18 @@ const AddCoffee = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.acknowledged) {
-          alert("Coffee added successfully!");
-        }
+        if (data.modifiedCount) alert("Coffee Updated");
       });
   };
 
   return (
-    <div className="bg-gray-100 p-10 rounded-lg shadow-lg w-10/12 mx-auto">
-      <h1 className="text-3xl font-bold text-center mb-4">Add New Coffee</h1>
+    <div className="bg-gray-100 p-10 rounded-lg shadow-lg w-10/12 lg:w-7/12 mx-auto">
+      <h1 className="text-3xl font-bold text-center mb-4">
+        Update Your Coffee
+      </h1>
       <p className="text-center text-gray-600 mb-6">
         It is a long established fact that a reader will be distracted by the
-        readable content of a page when looking at its layout. The point of
-        using Lorem Ipsum is that it has a more-or-less normal distribution of
-        letters, as opposed to using Content here.
+        readable content of a page when looking at its layout.
       </p>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -114,4 +115,4 @@ const AddCoffee = () => {
   );
 };
 
-export default AddCoffee;
+export default UpdateCofe;
